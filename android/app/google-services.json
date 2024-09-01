@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "876181124758",
+    "project_id": "thecortex-f7898",
+    "storage_bucket": "thecortex-f7898.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876181124758:android:0e3df72389f3413bf334b7",
+        "android_client_info": {
+          "package_name": "cortex.chat.rocket.reactnative"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIQ44Zzh0wECbusPOT3gIDB9hYYkH6hNQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876181124758:android:39080b23aea1060cf334b7",
+        "android_client_info": {
+          "package_name": "the.cortex"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIQ44Zzh0wECbusPOT3gIDB9hYYkH6hNQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

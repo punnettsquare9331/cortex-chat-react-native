@@ -21,7 +21,7 @@ const user = {
 	token: 'abc'
 };
 
-const baseUrl = 'https://chat.cortexflex.org';
+const baseUrl = 'https://thecortex.cortexflex.org';
 
 export default {
 	title: 'UIKit/UiKitMessage',

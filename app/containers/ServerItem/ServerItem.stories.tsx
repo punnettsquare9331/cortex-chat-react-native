@@ -10,8 +10,8 @@ export default {
 
 const defaultItem = {
 	name: 'Rocket.Chat',
-	id: 'https://chat.cortexflex.org/',
-	iconURL: 'https://chat.cortexflex.org/images/logo/android-chrome-512x512.png'
+	id: 'https://thecortex.cortexflex.org/',
+	iconURL: 'https://thecortex.cortexflex.org/images/logo/android-chrome-512x512.png'
 };
 
 const ServerItem = ({

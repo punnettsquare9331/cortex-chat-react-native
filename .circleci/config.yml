@@ -148,7 +148,6 @@ commands:
 
             if [[ $CIRCLE_JOB == "android-build-official" ]]; then
               echo -e "APPLICATION_ID=chat.rocket.android" >> ./gradle.properties
-              echo -e "BugsnagAPIKey=$BUGSNAG_KEY_OFFICIAL" >> ./gradle.properties
               echo $KEYSTORE_OFFICIAL_BASE64 | base64 --decode > ./app/$KEYSTORE_OFFICIAL
               echo -e "KEYSTORE=$KEYSTORE_OFFICIAL" >> ./gradle.properties
               echo -e "KEYSTORE_PASSWORD=$KEYSTORE_OFFICIAL_PASSWORD" >> ./gradle.properties
@@ -156,7 +155,6 @@ commands:
               echo -e "KEY_PASSWORD=$KEYSTORE_OFFICIAL_PASSWORD" >> ./gradle.properties
             else
               echo -e "APPLICATION_ID=chat.rocket.reactnative" >> ./gradle.properties
-              echo -e "BugsnagAPIKey=$BUGSNAG_KEY" >> ./gradle.properties
               echo $KEYSTORE_EXPERIMENTAL_BASE64 | base64 --decode > ./app/$KEYSTORE_EXPERIMENTAL
               echo -e "KEYSTORE=$KEYSTORE_EXPERIMENTAL" >> ./gradle.properties
               echo -e "KEYSTORE_PASSWORD=$KEYSTORE_EXPERIMENTAL_PASSWORD" >> ./gradle.properties
@@ -186,26 +184,6 @@ commands:
               ./gradlew assembleExperimentalPlayDebug
             fi
           working_directory: android
-
-      - run:
-          name: Upload sourcemaps to Bugsnag
-          command: |
-            if [[ $CIRCLE_JOB == "android-build-official" ]]; then
-              npx bugsnag-source-maps upload-react-native \
-                --api-key=$BUGSNAG_KEY_OFFICIAL \
-                --app-version-code=$CIRCLE_BUILD_NUM \
-                --platform android \
-                --source-map=android/app/build/generated/sourcemaps/react/officialPlay/release/app.bundle.map \
-                --bundle android/app/build/generated/assets/react/officialPlay/release/app.bundle
-            fi
-            if [[ $CIRCLE_JOB == "android-build-experimental" || "android-automatic-build-experimental" ]]; then
-              npx bugsnag-source-maps upload-react-native \
-                --api-key=$BUGSNAG_KEY \
-                --app-version-code=$CIRCLE_BUILD_NUM \
-                --platform android \
-                --source-map=android/app/build/generated/sourcemaps/react/experimentalPlay/release/app.bundle.map \
-                --bundle android/app/build/generated/assets/react/experimentalPlay/release/app.bundle
-            fi
 
       - store_artifacts:
           path: android/app/build/outputs
@@ -620,7 +598,7 @@ jobs:
       - persist_to_workspace:
           root: /Users/distiller/project
           paths:
-            - ios/build/Build/Products/Release-iphonesimulator/Cortex Chat.app
+            - ios/build/Build/Products/Release-iphonesimulator/theCORTEX.app
   
   e2e-test-ios:
     executor: mac-env

@@ -10,17 +10,17 @@ describe('FormatText', () => {
 	test('Format <http://link|Text> to be <http://link|Text>', () => {
 		expect(formatHyperlink('<http://link|Text>')).toBe('<http://link|Text>');
 	});
-	test('Format "[ ](https://chat.cortexflex.org/) Test" to be Test', () => {
-		expect(formatHyperlink('[ ](https://chat.cortexflex.org/) Test')).toBe('Test');
+	test('Format "[ ](https://thecortex.cortexflex.org/) Test" to be Test', () => {
+		expect(formatHyperlink('[ ](https://thecortex.cortexflex.org/) Test')).toBe('Test');
 	});
-	test('Format "[Open](https://chat.cortexflex.org/) Test" to be Test', () => {
-		expect(formatHyperlink('[Open](https://chat.cortexflex.org/) Test')).toBe('[Open](https://chat.cortexflex.org/) Test');
+	test('Format "[Open](https://thecortex.cortexflex.org/) Test" to be Test', () => {
+		expect(formatHyperlink('[Open](https://thecortex.cortexflex.org/) Test')).toBe('[Open](https://thecortex.cortexflex.org/) Test');
 	});
 	test('render test (arabic)', () => {
-		expect(formatHyperlink('[ ](https://chat.cortexflex.org/) اختبا')).toBe('اختبا');
+		expect(formatHyperlink('[ ](https://thecortex.cortexflex.org/) اختبا')).toBe('اختبا');
 	});
 
 	test('render test (russian)', () => {
-		expect(formatHyperlink('[ ](https://chat.cortexflex.org/) тест123')).toBe('тест123');
+		expect(formatHyperlink('[ ](https://thecortex.cortexflex.org/) тест123')).toBe('тест123');
 	});
 });

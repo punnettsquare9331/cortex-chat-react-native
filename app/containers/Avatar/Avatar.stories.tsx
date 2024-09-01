@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const server = 'https://chat.cortexflex.org';
+const server = 'https://thecortex.cortexflex.org';
 
 export default {
 	title: 'Avatar'

@@ -7,7 +7,7 @@ import { selectServerRequest } from '../app/actions/server';
 import { mockedStore as store } from '../app/reducers/mockedStore';
 import { setUser } from '../app/actions/login';
 
-const baseUrl = 'https://chat.cortexflex.org';
+const baseUrl = 'https://thecortex.cortexflex.org';
 store.dispatch(selectServerRequest(baseUrl));
 store.dispatch(setUser({ id: 'abc', username: 'rocket.cat', name: 'Rocket Cat' }));
 

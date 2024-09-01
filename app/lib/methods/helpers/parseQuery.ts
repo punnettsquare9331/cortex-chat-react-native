@@ -1,10 +1,10 @@
 /**
  *
  * @example
- * parseQuery("host=chat.cortexflex.org&path=channel/general/thread/meRK2nfjR99MjLn55")
+ * parseQuery("host=thecortex.cortexflex.org&path=channel/general/thread/meRK2nfjR99MjLn55")
  * // the return will be
  * {
- * 	host: "chat.cortexflex.org",
+ * 	host: "thecortex.cortexflex.org",
  * 	path: "channel/general/thread/meRK2nfjR99MjLn55"
  * }
  */

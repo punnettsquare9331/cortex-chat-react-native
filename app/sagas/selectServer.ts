@@ -20,7 +20,6 @@ import { clearSettings } from '../actions/settings';
 import { clearUser, setUser } from '../actions/login';
 import { clearActiveUsers } from '../actions/activeUsers';
 import database from '../lib/database';
-import log, { logServerVersion } from '../lib/methods/helpers/log';
 import I18n from '../i18n';
 import { BASIC_AUTH_KEY, setBasicAuth } from '../lib/methods/helpers/fetch';
 import { appStart } from '../actions/app';
@@ -135,7 +134,6 @@ const getServerInfoSaga = function* getServerInfoSaga({ server, raiseError = tru
 
 		return serverRecord;
 	} catch (e) {
-		log(e);
 		yield put(serverFailure());
 	}
 };
@@ -211,11 +209,9 @@ const handleSelectServer = function* handleSelectServer({ server, version, fetch
 		const serverVersion = (serverInfo && serverInfo.version) || (version as string);
 
 		// we'll set serverVersion as metadata for bugsnag
-		logServerVersion(serverVersion);
 		yield put(selectServerSuccess({ server, version: serverVersion, name: serverInfo?.name || 'Rocket.Chat' }));
 	} catch (e) {
 		yield put(selectServerFailure());
-		log(e);
 	}
 };
 
@@ -250,14 +246,13 @@ const handleServerRequest = function* handleServerRequest({ server, username, fr
 						});
 					}
 				} catch (e) {
-					log(e);
+					console.log(e);
 				}
 			});
 			yield put(selectServerRequest(server, serverInfo.version, false));
 		}
 	} catch (e) {
 		yield put(serverFailure());
-		log(e);
 	}
 };
 

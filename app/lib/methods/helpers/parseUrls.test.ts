@@ -47,7 +47,7 @@ const tmpImageValidLink = {
 const tmpImagePointingToAnAsset = {
 	urls: [
 		{
-			url: 'https://chat.cortexflex.org/',
+			url: 'https://thecortex.cortexflex.org/',
 			meta: {
 				pageTitle: 'Rocket.Chat',
 				msapplicationTileImage: 'assets/tile_144.png',
@@ -66,8 +66,8 @@ const tmpImagePointingToAnAsset = {
 		{
 			_id: 0,
 			title: 'Rocket.Chat',
-			image: 'https://chat.cortexflex.org/assets/favicon_512.png',
-			url: 'https://chat.cortexflex.org/'
+			image: 'https://thecortex.cortexflex.org/assets/favicon_512.png',
+			url: 'https://thecortex.cortexflex.org/'
 		}
 	]
 } as unknown as { urls: IUrlFromServer[]; expectedResult: IUrl[] };
@@ -75,7 +75,7 @@ const tmpImagePointingToAnAsset = {
 const tmpImagePointingToAnAssetThatStartsWithSlashWithoutParsedUrl = {
 	urls: [
 		{
-			url: 'https://chat.cortexflex.org/',
+			url: 'https://thecortex.cortexflex.org/',
 			meta: {
 				pageTitle: 'Rocket.Chat',
 				msapplicationTileImage: 'assets/tile_144.png',
@@ -94,8 +94,8 @@ const tmpImagePointingToAnAssetThatStartsWithSlashWithoutParsedUrl = {
 		{
 			_id: 0,
 			title: 'Rocket.Chat',
-			image: 'https://chat.cortexflex.org/assets/favicon_512.png',
-			url: 'https://chat.cortexflex.org/'
+			image: 'https://thecortex.cortexflex.org/assets/favicon_512.png',
+			url: 'https://thecortex.cortexflex.org/'
 		}
 	]
 } as unknown as { urls: IUrlFromServer[]; expectedResult: IUrl[] };
@@ -103,7 +103,7 @@ const tmpImagePointingToAnAssetThatStartsWithSlashWithoutParsedUrl = {
 const tmpImagePointingToAnAssetThatStartsWithSlashWithParsedUrl = {
 	urls: [
 		{
-			url: 'https://chat.cortexflex.org/',
+			url: 'https://thecortex.cortexflex.org/',
 			meta: {
 				pageTitle: 'Rocket.Chat',
 				msapplicationTileImage: 'assets/tile_144.png',
@@ -118,8 +118,8 @@ const tmpImagePointingToAnAssetThatStartsWithSlashWithParsedUrl = {
 			},
 			parsedUrl: {
 				hash: '',
-				host: 'chat.cortexflex.org',
-				hostname: 'chat.cortexflex.org',
+				host: 'thecortex.cortexflex.org',
+				hostname: 'thecortex.cortexflex.org',
 				pathname: '/',
 				port: '',
 				protocol: 'https:',
@@ -132,8 +132,8 @@ const tmpImagePointingToAnAssetThatStartsWithSlashWithParsedUrl = {
 		{
 			_id: 0,
 			title: 'Rocket.Chat',
-			image: 'https://chat.cortexflex.org/assets/favicon_512.png',
-			url: 'https://chat.cortexflex.org/'
+			image: 'https://thecortex.cortexflex.org/assets/favicon_512.png',
+			url: 'https://thecortex.cortexflex.org/'
 		}
 	]
 } as unknown as { urls: IUrlFromServer[]; expectedResult: IUrl[] };
@@ -141,7 +141,7 @@ const tmpImagePointingToAnAssetThatStartsWithSlashWithParsedUrl = {
 const tmpImagePointingToAnAssetThatStartsWithDoubleSlashWithParsedUrl = {
 	urls: [
 		{
-			url: 'https://chat.cortexflex.org/',
+			url: 'https://thecortex.cortexflex.org/',
 			meta: {
 				pageTitle: 'Rocket.Chat',
 				msapplicationTileImage: 'assets/tile_144.png',
@@ -155,11 +155,11 @@ const tmpImagePointingToAnAssetThatStartsWithDoubleSlashWithParsedUrl = {
 				contentType: 'text/html; charset=utf-8'
 			},
 			parsedUrl: {
-				host: 'chat.cortexflex.org',
+				host: 'thecortex.cortexflex.org',
 				hash: null,
 				protocol: 'https:',
 				port: null,
-				hostname: 'chat.cortexflex.org'
+				hostname: 'thecortex.cortexflex.org'
 			}
 		}
 	],
@@ -167,8 +167,8 @@ const tmpImagePointingToAnAssetThatStartsWithDoubleSlashWithParsedUrl = {
 		{
 			_id: 0,
 			title: 'Rocket.Chat',
-			image: 'https://chat.cortexflex.org/assets/favicon_512.png',
-			url: 'https://chat.cortexflex.org/'
+			image: 'https://thecortex.cortexflex.org/assets/favicon_512.png',
+			url: 'https://thecortex.cortexflex.org/'
 		}
 	]
 } as unknown as { urls: IUrlFromServer[]; expectedResult: IUrl[] };
@@ -176,7 +176,7 @@ const tmpImagePointingToAnAssetThatStartsWithDoubleSlashWithParsedUrl = {
 const tmpImagePointingToAnAssetThatStartsWithDoubleSlashWithoutParsedUrl = {
 	urls: [
 		{
-			url: 'https://chat.cortexflex.org/',
+			url: 'https://thecortex.cortexflex.org/',
 			meta: {
 				pageTitle: 'Rocket.Chat',
 				msapplicationTileImage: 'assets/tile_144.png',
@@ -195,8 +195,8 @@ const tmpImagePointingToAnAssetThatStartsWithDoubleSlashWithoutParsedUrl = {
 		{
 			_id: 0,
 			title: 'Rocket.Chat',
-			image: 'https://chat.cortexflex.org/assets/favicon_512.png',
-			url: 'https://chat.cortexflex.org/'
+			image: 'https://thecortex.cortexflex.org/assets/favicon_512.png',
+			url: 'https://thecortex.cortexflex.org/'
 		}
 	]
 } as unknown as { urls: IUrlFromServer[]; expectedResult: IUrl[] };

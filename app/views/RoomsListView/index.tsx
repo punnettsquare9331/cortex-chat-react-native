@@ -1,5 +1,5 @@
-import React from 'react';
-import { BackHandler, FlatList, Keyboard, NativeEventSubscription, RefreshControl, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { BackHandler, FlatList, Keyboard, NativeEventSubscription, RefreshControl, Text, View, Linking, TouchableOpacity, Image, Modal, StyleSheet, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import { dequal } from 'dequal';
 import { Q } from '@nozbe/watermelondb';
@@ -7,8 +7,10 @@ import { withSafeAreaInsets } from 'react-native-safe-area-context';
 import { Subscription } from 'rxjs';
 import { StackNavigationOptions, StackNavigationProp } from '@react-navigation/stack';
 import { Header } from '@react-navigation/elements';
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import { Dispatch } from 'redux';
+import * as WebBrowser from 'expo-web-browser';
+import axios from 'axios';
 
 import database from '../../lib/database';
 import RoomItem, { ROW_HEIGHT, ROW_HEIGHT_CONDENSED } from '../../containers/RoomItem';
@@ -49,9 +51,10 @@ import { Services } from '../../lib/services';
 import { SupportedVersionsExpired } from '../../containers/SupportedVersions';
 import { ChangePasswordRequired } from '../../containers/ChangePasswordRequired';
 
+
 type TNavigation = CompositeNavigationProp<
-	StackNavigationProp<ChatsStackParamList, 'RoomsListView'>,
-	CompositeNavigationProp<StackNavigationProp<ChatsStackParamList>, StackNavigationProp<DrawerParamList>>
+StackNavigationProp<ChatsStackParamList, 'RoomsListView'>,
+CompositeNavigationProp<StackNavigationProp<ChatsStackParamList>, StackNavigationProp<DrawerParamList>>
 >;
 
 interface IRoomsListViewProps {
@@ -129,6 +132,235 @@ const filterIsFavorite = (s: TSubscriptionModel) => s.f;
 const filterIsOmnichannel = (s: TSubscriptionModel) => s.t === 'l';
 const filterIsTeam = (s: TSubscriptionModel) => s.teamMain;
 const filterIsDiscussion = (s: TSubscriptionModel) => s.prid;
+
+
+
+const openLinkInApp = async (url: string, theme: TSupportedThemes = 'light'): Promise<void> => {
+	const telRegExp = new RegExp(/^(tel:)/);
+	if (telRegExp.test(url)) {
+		try {
+			await Linking.openURL(url);
+			return;
+		} catch (e) {
+			log(e);
+		}
+	}
+
+	try {
+
+		await WebBrowser.openBrowserAsync(url, {
+			toolbarColor: themes[theme].surfaceNeutral,
+			controlsColor: themes[theme].fontSecondaryInfo,
+			// https://github.com/expo/expo/pull/4923
+			enableBarCollapsing: true,
+			showTitle: true
+		});
+
+	} catch {
+		try {
+			await Linking.openURL(url);
+		} catch {
+			// do nothing
+		}
+	}
+}; // You can use any icon library you prefer
+
+const GOOGLE_SHEETS_API_KEY = 'AIzaSyCr-fwQig5hux0SzpsVi2rlb0wYvjtKPWw'; // Replace with your API key
+const SHEET_ID = '110g_TAQUnAVC3YEra_PKih6iG2EXFydTtt4CyOb1D24';
+const SHEET_NAME = 'Webinars'; // Replace with your sheet name if different
+
+interface Webinar {
+	title: string;
+	date: string;
+	description: string;
+	link: string;
+	image: string;
+	host: string; 
+}
+
+const BlankComponentWithAction: React.FC = () => {
+	const [modalVisible, setModalVisible] = useState<boolean>(false);
+	const [webinarDetails, setWebinarDetails] = useState<Webinar[]>([]);
+	const [loading, setLoading] = useState<boolean>(true);
+
+	useEffect(() => {
+		// Fetch data from Google Sheets
+		const fetchWebinarDetails = async () => {
+			try {
+				const response = await axios.get(
+					`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${GOOGLE_SHEETS_API_KEY}`
+				);
+				const rows = response.data.values;
+				const details: Webinar[] = rows.slice(1).map((row: any[]) => ({
+					title: row[0],
+					date: row[1],
+					description: row[2],
+					link: row[3],
+					image: row[4],
+					host: row[5]
+				}));
+				setWebinarDetails(details);
+				setLoading(false);
+			} catch (error) {
+				console.error('Error fetching data from Google Sheets:', error);
+				setLoading(false);
+			}
+		};
+
+		fetchWebinarDetails();
+	}, []);
+
+	const openLeaderboard = () => {
+		const url = 'https://josiah4825.softr.app'; // Replace with your leaderboard URL
+		openLinkInApp(url); // Existing functionality to open the leaderboard URL
+	};
+
+	const openBlankScreen = () => {
+		setModalVisible(true); // Open the modal
+	};
+
+	const closeBlankScreen = () => {
+		setModalVisible(false); // Close the modal
+	};
+	return (
+		<View style={{ flexDirection: 'row', backgroundColor: 'transparent', padding: 10 }}>
+			<TouchableOpacity onPress={openLeaderboard} style={{ flex: 1, alignItems: 'center' }}>
+				<Image
+					source={require('./trophy.png')} // The image is in the same directory
+					style={{ width: 32, height: 32 }}
+				/>
+				<Text style={{ color: 'orange' }}>Leaderboard</Text>
+			</TouchableOpacity>
+			<TouchableOpacity onPress={openBlankScreen} style={{ flex: 1, alignItems: 'center' }}>
+				<Image
+					source={require('./calendar.png')} // The image is in the same directory
+					style={{ width: 32, height: 32 }}
+				/>
+				<Text style={{ color: 'orange' }}>Courses</Text>
+			</TouchableOpacity>
+
+			{/* Modal to display webinar details */}
+			<Modal
+				animationType='slide'
+				transparent={false}
+				visible={modalVisible}
+				onRequestClose={closeBlankScreen}
+			>
+				<SafeAreaView style={modalStyles.safeArea}>
+					<View style={modalStyles.topSpace} />
+					<View style={modalStyles.modalView}>
+						{loading ? (
+							<Text>Loading...</Text>
+						) : (
+							<ScrollView style={modalStyles.scrollView}>
+								{webinarDetails.map((webinar, index) => (
+									<View key={index} style={modalStyles.webinarItem}>
+										{webinar.image ? (
+											<Image
+												source={{ uri: webinar.image }}
+												style={modalStyles.webinarImage}
+											/>
+										) : null}
+										<Text style={modalStyles.webinarTitle}>{webinar.title}</Text>
+										<Text style={modalStyles.webinarDate}>{webinar.date}</Text>
+										<Text style={modalStyles.webinarHost}>Host: {webinar.host}</Text>
+										<Text style={modalStyles.webinarDescription}>{webinar.description}</Text>
+										<TouchableOpacity onPress={() => openLinkInApp(webinar.link)} style={modalStyles.linkButton}>
+											<Text style={modalStyles.linkButtonText}>Join Webinar</Text>
+										</TouchableOpacity>
+									</View>
+								))}
+							</ScrollView>
+						)}
+						<TouchableOpacity onPress={closeBlankScreen} style={modalStyles.closeButton}>
+							<Text style={modalStyles.closeButtonText}>Close</Text>
+						</TouchableOpacity>
+					</View>
+				</SafeAreaView>
+			</Modal>
+		</View>
+	);
+};
+
+const modalStyles = StyleSheet.create({
+	safeArea: {
+		flex: 1,
+		backgroundColor: 'white'
+	},
+	modalView: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'white',
+		padding: 20
+	},
+	/* 	modalText: {
+		fontSize: 24,
+		marginBottom: 20,
+		fontWeight: 'bold'
+	}, */
+	scrollView: {
+		width: '100%'
+	},
+	webinarItem: {
+		marginBottom: 20,
+		padding: 10,
+		backgroundColor: '#f0f0f0',
+		borderRadius: 5,
+		alignItems: 'center'
+	},
+	webinarImage: {
+		width: 100,
+		height: 100,
+		marginBottom: 10,
+		borderRadius: 5
+	},
+	webinarTitle: {
+		fontSize: 18,
+		fontWeight: 'bold'
+	},
+	webinarDate: {
+		fontSize: 14,
+		color: '#888',
+		marginBottom: 5
+	},
+	webinarHost: {
+		fontSize: 14,
+		color: '#555',
+		marginBottom: 5,
+		fontStyle: 'italic'
+	},
+	webinarDescription: {
+		fontSize: 14,
+		color: '#555',
+		marginBottom: 10
+	},
+	linkButton: {
+		backgroundColor: 'orange',
+		padding: 10,
+		borderRadius: 5,
+		alignItems: 'center'
+	},
+	linkButtonText: {
+		color: 'white',
+		fontSize: 16
+	},
+	closeButton: {
+		marginTop: 20,
+		padding: 10,
+		backgroundColor: 'gray',
+		borderRadius: 5
+	},
+	closeButtonText: {
+		color: 'white',
+		fontSize: 16
+	},
+	topSpace: {
+		height: '10%', // Height of the blank space, adjust as needed
+		backgroundColor: 'transparent'
+	}
+});
+
 
 const shouldUpdateProps = [
 	'searchText',
@@ -507,11 +739,11 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 
 	internalSetState = (
 		state:
-			| ((
-					prevState: Readonly<IRoomsListViewState>,
-					props: Readonly<IRoomsListViewProps>
+		| ((
+			prevState: Readonly<IRoomsListViewState>,
+			props: Readonly<IRoomsListViewProps>
 			  ) => Pick<IRoomsListViewState, keyof IRoomsListViewState> | IRoomsListViewState | null)
-			| (Pick<IRoomsListViewState, keyof IRoomsListViewState> | IRoomsListViewState | null),
+		| (Pick<IRoomsListViewState, keyof IRoomsListViewState> | IRoomsListViewState | null),
 		callback?: () => void
 	) => {
 		if (this.animated) {
@@ -871,7 +1103,7 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 		}
 	};
 
-	getScrollRef = (ref: FlatList) => (this.scroll = ref);
+	getScrollRef = (ref: FlatList) => this.scroll = ref;
 
 	renderListHeader = () => {
 		const { searching } = this.state;
@@ -999,6 +1231,7 @@ class RoomsListView extends React.Component<IRoomsListViewProps, IRoomsListViewS
 		return (
 			<SafeAreaView testID='rooms-list-view' style={{ backgroundColor: themes[theme].surfaceRoom }}>
 				<StatusBar />
+				<BlankComponentWithAction></BlankComponentWithAction>
 				{this.renderHeader()}
 				{this.renderScroll()}
 				{showServerDropdown ? <ServerDropdown /> : null}

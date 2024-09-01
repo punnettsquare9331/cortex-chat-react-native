@@ -14,7 +14,7 @@ import { colors } from '../../lib/constants';
 import { IRoomContext, RoomContext } from '../../views/RoomView/context';
 
 const initialStoreState = () => {
-	const baseUrl = 'https://chat.cortexflex.org';
+	const baseUrl = 'https://thecortex.cortexflex.org';
 	mockedStore.dispatch(selectServerRequest(baseUrl, '6.4.0'));
 	mockedStore.dispatch(setUser({ id: 'abc', username: 'rocket.cat', name: 'Rocket Cat', roles: ['user'] }));
 

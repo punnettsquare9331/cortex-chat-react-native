@@ -1,7 +1,7 @@
 import { serializeAsciiUrl } from '.';
 
 const ASCIIUrl = 'https://чат24.рф';
-const NonASCIIUrl = 'chat.cortexflex.org';
+const NonASCIIUrl = 'thecortex.cortexflex.org';
 const ASCIIUrlSerialized = 'https://xn--24-6kc6exa.xn--p1ai';
 
 describe('Serialize ASCII url on ios', () => {

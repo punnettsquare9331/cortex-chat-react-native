@@ -10,7 +10,7 @@ import { setUser } from '../app/actions/login';
 
 RNBootSplash.hide();
 
-const baseUrl = 'https://chat.cortexflex.org';
+const baseUrl = 'https://thecortex.cortexflex.org';
 store.dispatch(selectServerRequest(baseUrl));
 store.dispatch(setUser({ id: 'abc', username: 'rocket.cat', name: 'Rocket Cat' }));
 database.setActiveDB(baseUrl);

@@ -7,5 +7,5 @@
 		},
 		"category": "MESSAGE"
 	},
-	"ejson": "{ \"host\": \"https://chat.cortexflex.org/\", \"rid\": \"GENERAL\", \"type\": \"c\", \"name\": \"general\" }"
+	"ejson": "{ \"host\": \"https://thecortex.cortexflex.org/\", \"rid\": \"GENERAL\", \"type\": \"c\", \"name\": \"general\" }"
 }

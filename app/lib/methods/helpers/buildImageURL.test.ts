@@ -4,13 +4,13 @@ import { buildImageURL } from './buildImageURL';
 describe('buildImageURL', () => {
 	const testCases = [
 		[
-			'https://chat.cortexflex.org/avatar/rocket.cat',
-			'https://chat.cortexflex.org/avatar/rocket.cat',
-			'https://chat.cortexflex.org/direct/NNNNnnnnNNNNnnnnfrocket.cat'
+			'https://thecortex.cortexflex.org/avatar/rocket.cat',
+			'https://thecortex.cortexflex.org/avatar/rocket.cat',
+			'https://thecortex.cortexflex.org/direct/NNNNnnnnNNNNnnnnfrocket.cat'
 		],
-		['https://chat.cortexflex.org/assets/favicon_512.png', 'assets/favicon_512.png', 'https://chat.cortexflex.org/channel/general'],
-		['https://chat.cortexflex.org/assets/favicon_512.png', '/assets/favicon_512.png', 'https://chat.cortexflex.org/channel/general'],
-		['https://chat.cortexflex.org/assets/favicon_512.png', '//assets/favicon_512.png', 'https://chat.cortexflex.org/channel/general/']
+		['https://thecortex.cortexflex.org/assets/favicon_512.png', 'assets/favicon_512.png', 'https://thecortex.cortexflex.org/channel/general'],
+		['https://thecortex.cortexflex.org/assets/favicon_512.png', '/assets/favicon_512.png', 'https://thecortex.cortexflex.org/channel/general'],
+		['https://thecortex.cortexflex.org/assets/favicon_512.png', '//assets/favicon_512.png', 'https://thecortex.cortexflex.org/channel/general/']
 	] as const;
 	it.each(testCases)('should return %s for %s', (expectedResult, metaImgUrl, linkUrl) => {
 		const result = buildImageURL(linkUrl, metaImgUrl);

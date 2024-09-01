@@ -36,6 +36,7 @@ const FormContainer = ({ children, testID, ...props }: IFormContainer) => {
 			keyboardVerticalOffset={128}
 		>
 			<StatusBar />
+			<View style={{ height: 50, backgroundColor: 'lightgray' }} />
 			<ScrollView
 				style={sharedStyles.container}
 				contentContainerStyle={[sharedStyles.containerScrollView, styles.scrollView]}

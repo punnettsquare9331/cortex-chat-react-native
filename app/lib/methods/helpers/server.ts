@@ -1,7 +1,7 @@
 /*
 	Extract hostname from url
-	url = 'https://chat.cortexflex.org/method'
-	hostname = 'chat.cortexflex.org'
+	url = 'https://thecortex.cortexflex.org/method'
+	hostname = 'thecortex.cortexflex.org'
 */
 export const extractHostname = (url: string): string => {
 	let hostname;
