@@ -11,6 +11,7 @@ import { CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import { Dispatch } from 'redux';
 import * as WebBrowser from 'expo-web-browser';
 import axios from 'axios';
+import moment, { Moment } from 'moment';
 
 import database from '../../lib/database';
 import RoomItem, { ROW_HEIGHT, ROW_HEIGHT_CONDENSED } from '../../containers/RoomItem';
@@ -176,12 +177,16 @@ interface Webinar {
 	link: string;
 	image: string;
 	host: string; 
+	day: Moment;
+	hostDetails: string;
 }
 
 const BlankComponentWithAction: React.FC = () => {
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
 	const [webinarDetails, setWebinarDetails] = useState<Webinar[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
+	const [currentWeek, setCurrentWeek] = useState<number>(moment().week());
+	const [expandedCard, setExpandedCard] = useState<number | null>(null); // Track expanded card
 
 	useEffect(() => {
 		// Fetch data from Google Sheets
@@ -193,11 +198,13 @@ const BlankComponentWithAction: React.FC = () => {
 				const rows = response.data.values;
 				const details: Webinar[] = rows.slice(1).map((row: any[]) => ({
 					title: row[0],
-					date: row[1],
+					date: row[1], // Text for display purposes (user-facing)
 					description: row[2],
 					link: row[3],
 					image: row[4],
-					host: row[5]
+					host: row[5],
+					hostDetails: row[6], // Additional host details
+					day: moment(row[7], 'MM/DD/YYYY') // Parse the Google Sheets date for calculations
 				}));
 				setWebinarDetails(details);
 				setLoading(false);
@@ -208,7 +215,12 @@ const BlankComponentWithAction: React.FC = () => {
 		};
 
 		fetchWebinarDetails();
-	}, []);
+	}, [modalVisible]);
+
+	// Filter webinars for the current week
+	const filteredWebinars = webinarDetails.filter((webinar) =>
+		webinar.day.week() === currentWeek
+	);
 
 	const openLeaderboard = () => {
 		const url = 'https://josiah4825.softr.app'; // Replace with your leaderboard URL
@@ -222,6 +234,19 @@ const BlankComponentWithAction: React.FC = () => {
 	const closeBlankScreen = () => {
 		setModalVisible(false); // Close the modal
 	};
+
+	const handleExpand = (index: number) => {
+		setExpandedCard(expandedCard === index ? null : index); // Toggle card expansion
+	};
+
+	const navigateWeek = (direction: 'prev' | 'next') => {
+		if (direction === 'prev') {
+			setCurrentWeek((prev) => Math.max(prev - 1, 1)); // Prevent negative weeks
+		} else {
+			setCurrentWeek((prev) => prev + 1); // Navigate forward
+		}
+	};
+
 	return (
 		<View style={{ flexDirection: 'row', backgroundColor: 'transparent', padding: 10 }}>
 			<TouchableOpacity onPress={openLeaderboard} style={{ flex: 1, alignItems: 'center' }}>
@@ -253,23 +278,49 @@ const BlankComponentWithAction: React.FC = () => {
 							<Text>Loading...</Text>
 						) : (
 							<ScrollView style={modalStyles.scrollView}>
-								{webinarDetails.map((webinar, index) => (
-									<View key={index} style={modalStyles.webinarItem}>
-										{webinar.image ? (
-											<Image
-												source={{ uri: webinar.image }}
-												style={modalStyles.webinarImage}
-											/>
-										) : null}
-										<Text style={modalStyles.webinarTitle}>{webinar.title}</Text>
-										<Text style={modalStyles.webinarDate}>{webinar.date}</Text>
-										<Text style={modalStyles.webinarHost}>Host: {webinar.host}</Text>
-										<Text style={modalStyles.webinarDescription}>{webinar.description}</Text>
-										<TouchableOpacity onPress={() => openLinkInApp(webinar.link)} style={modalStyles.linkButton}>
-											<Text style={modalStyles.linkButtonText}>Join Webinar</Text>
-										</TouchableOpacity>
-									</View>
-								))}
+								{/* Week Navigation */}
+								<View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
+									<TouchableOpacity onPress={() => navigateWeek('prev')}>
+										<Text>← Previous Week</Text>
+									</TouchableOpacity>
+									<Text>
+										Week {currentWeek}
+									</Text>
+									<TouchableOpacity onPress={() => navigateWeek('next')}>
+										<Text>Next Week →</Text>
+									</TouchableOpacity>
+								</View>
+
+								{filteredWebinars.length === 0 ? (
+									<Text>No webinars scheduled for this week.</Text>
+								) : (
+									filteredWebinars.map((webinar, index) => (
+										<View key={index} style={modalStyles.webinarItem}>
+											{webinar.image ? (
+												<Image
+													source={{ uri: webinar.image }}
+													style={modalStyles.webinarImage}
+												/>
+											) : null}
+											<TouchableOpacity onPress={() => handleExpand(index)}>
+												<Text style={modalStyles.webinarTitle}>{webinar.title}</Text>
+											</TouchableOpacity>
+											<Text style={modalStyles.webinarDate}>{webinar.date}</Text>
+											{/* Always show host name */}
+											<Text style={modalStyles.webinarHost}>Host: {webinar.host}</Text>
+											{/* Expand to show HostDetails and Description */}
+											{expandedCard === index && (
+												<>
+													<Text>Host Bio: {webinar.hostDetails}</Text>
+													<Text style={modalStyles.webinarDescription}>{webinar.description}</Text>
+												</>
+											)}
+											<TouchableOpacity onPress={() => openLinkInApp(webinar.link)} style={modalStyles.linkButton}>
+												<Text style={modalStyles.linkButtonText}>Join Zoom</Text>
+											</TouchableOpacity>
+										</View>
+									))
+								)}
 							</ScrollView>
 						)}
 						<TouchableOpacity onPress={closeBlankScreen} style={modalStyles.closeButton}>
@@ -356,7 +407,7 @@ const modalStyles = StyleSheet.create({
 		fontSize: 16
 	},
 	topSpace: {
-		height: '10%', // Height of the blank space, adjust as needed
+		height: '5%', // Height of the blank space, adjust as needed
 		backgroundColor: 'transparent'
 	}
 });
